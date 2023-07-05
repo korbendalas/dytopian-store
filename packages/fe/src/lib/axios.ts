@@ -19,6 +19,8 @@ export const axios = Axios.create({
   baseURL: API_URL,
 });
 
+// TODO add proper types here
+// @ts-ignore
 axios.interceptors.request.use(authRequestInterceptor);
 
 let isRefreshing = false;
