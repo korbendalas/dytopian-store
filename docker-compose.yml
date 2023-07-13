@@ -13,7 +13,7 @@ services:
       - db
       - redis
     volumes:
-      - ./be:/app
+      - ./packages/api:/app
       - /app/node_modules
 
   fe:
@@ -27,7 +27,7 @@ services:
     depends_on:
       - api
     volumes:
-      - ./fe:/app
+      - ./packages/fe:/app
       - /app/node_modules
 
   db:
@@ -38,8 +38,6 @@ services:
       POSTGRES_DB: ${DB_NAME}
     ports:
       - "5432:5432"
-    env_file:
-      - ./packages/api/.env
     volumes:
       - db-data-user-software:/var/lib/postgresql/data
 
@@ -60,6 +58,7 @@ services:
     restart: unless-stopped
     ports:
       - "6379:6379"
+
   redis-commander:
     image: rediscommander/redis-commander:latest
     container_name: redis-commander

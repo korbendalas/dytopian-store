@@ -2,25 +2,23 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './modules/user/user.module';
 import { PrismaModule } from './modules/prisma/prisma.module';
+import { UserModule } from './modules/user/user.module';
 // import { HomeModule } from './modules/home/home.module';
+import { CacheModule } from '@nestjs/cache-manager';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { UserInterceptor } from './modules/user/interceptors/user.interceptor';
-import { AuthGuard } from './common/guards/auth.guard';
-import { RemovePasswordInterceptor } from './modules/user/interceptors/removePassword.interceptor';
-import { ProductsModule } from './modules/products/products.module';
-import { AuthModule } from './modules/auth/auth.module';
+import * as redisStore from 'cache-manager-redis-store';
+import { AccessControlModule, ACGuard } from 'nest-access-control';
+import type { ClientOpts } from 'redis';
+import { AtGuard } from './common/guards/at.guard';
 import { config } from './config';
+import { AuthModule } from './modules/auth/auth.module';
+import { RBAC_POLICY } from './modules/auth/rbac-policy';
+import { CartModule } from './modules/cart/cart.module';
 import { CommonModule } from './modules/common/common.module';
 import { MailerModule } from './modules/mailer/mailer.module';
-import { AtGuard } from './common/guards/at.guard';
-import { AccessControlModule, ACGuard } from 'nest-access-control';
-import { RBAC_POLICY } from './modules/auth/rbac-policy';
-import { CacheModule } from '@nestjs/cache-manager';
-import * as redisStore from 'cache-manager-redis-store';
-import type { ClientOpts } from 'redis';
-import { CartModule } from './modules/cart/cart.module';
+import { ProductsModule } from './modules/products/products.module';
+import { RemovePasswordInterceptor } from './modules/user/interceptors/removePassword.interceptor';
 
 @Module({
   imports: [
