@@ -13,7 +13,7 @@ services:
       - db
       - redis
     volumes:
-      - ./user-management-be:/app
+      - ./be:/app
       - /app/node_modules
 
   fe:
