@@ -1,37 +1,34 @@
 import {
-  AccountPage,
-  BillingPage,
-  ConnectionsPage,
-  DashboardPage,
-  NotificationsPage,
-  OrdersPage,
-  SecurityPage,
-  StorePage,
-  UserOverviewPage,
-} from '@/pages';
+  Dashboard,
+  User,
+  UserAccount,
+  UserNotifications,
+  UserOrders,
+  UserSecurity,
+} from '@/components';
+import { StorePage } from '@/pages';
 import { Navigate } from 'react-router-dom';
 
 export const protectedRoutes = [
   {
     path: '/dashboard',
-    element: <DashboardPage />,
+    element: <Dashboard />,
     children: [
       {
         path: '/dashboard/user',
-        element: <UserOverviewPage />,
+        element: <User />,
         children: [
-          { path: '/dashboard/user/account', element: <AccountPage /> },
-          { path: '/dashboard/user/billing', element: <BillingPage /> },
-          { path: '/dashboard/user/connections', element: <ConnectionsPage /> },
+          { path: '/dashboard/user/account', element: <UserAccount /> },
+          { path: '/dashboard/user/orders', element: <UserOrders /> },
+
           {
             path: '/dashboard/user/notifications',
-            element: <NotificationsPage />,
+            element: <UserNotifications />,
           },
-          { path: '/dashboard/user/security', element: <SecurityPage /> },
+          { path: '/dashboard/user/security', element: <UserSecurity /> },
         ],
       },
 
-      { path: '/dashboard/orders', element: <OrdersPage /> },
       { path: '/dashboard/store', element: <StorePage /> },
 
       // { path: '/', element: <DashboardPage /> },

@@ -1,37 +1,8 @@
 version: '3.9'
 
 services:
-  api:
-    build:
-      context: ./packages/api
-      dockerfile: Dockerfile
-    command: npm run start:dev
-    ports:
-      - "4000:4000"
-    env_file: ./packages/api/.env
-    depends_on:
-      - db
-      - redis
-    volumes:
-      - ./packages/api:/app
-      - /app/node_modules
-
-  fe:
-    build:
-      context: ./packages/fe
-      dockerfile: Dockerfile
-    command: npm run dev
-    ports:
-      - "3000:3000"
-    env_file: ./packages/fe/.env
-    depends_on:
-      - api
-    volumes:
-      - ./packages/fe:/app
-      - /app/node_modules
-
   db:
-    image: postgres
+    image: postgres:13.4-bullseye
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASS}
@@ -41,8 +12,9 @@ services:
     volumes:
       - db-data-user-software:/var/lib/postgresql/data
 
+
   db-test:
-    image: postgres
+    image: postgres:13.4-bullseye
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
@@ -52,12 +24,14 @@ services:
     volumes:
       - db-test-data-user-software:/var/lib/postgresql/data
 
+
   redis:
     image: redis:7.0
     container_name: redis-store
     restart: unless-stopped
     ports:
       - "6379:6379"
+
 
   redis-commander:
     image: rediscommander/redis-commander:latest
@@ -67,6 +41,7 @@ services:
       - "8081:8081"
     environment:
       - REDIS_HOSTS=local:redis:6379
+
 
 volumes:
   db-data-user-software:
