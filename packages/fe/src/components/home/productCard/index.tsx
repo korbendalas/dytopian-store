@@ -1,3 +1,4 @@
+import { useAddToCart } from '@/components/home/shoppingCart/api/addToCart';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -7,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { useAddToCart } from '@/features/shoppingCart/api/addToCart';
 import { cn } from '@/lib/cn';
 import { useRef } from 'react';
 import { Link } from 'react-router-dom';

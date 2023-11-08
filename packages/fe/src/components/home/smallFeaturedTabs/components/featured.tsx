@@ -1,6 +1,6 @@
-import { ProductCard } from '@/components/productCard';
+import { useGetFeaturedProducts } from '@/components/home/smallFeaturedTabs/api/getFeaturedProducts';
 import { Spinner } from '@/components/ui';
-import { useGetFeaturedProducts } from '@/features/smallFeaturedTabs/api/getFeaturedProducts';
+import { ProductCard } from '../../productCard';
 
 export const Featured = () => {
   const getFeaturedProductsQuery = useGetFeaturedProducts();

@@ -4,6 +4,13 @@
   "workspaces": [
     "packages/*"
   ],
+  "scripts": {
+    "bootstrap": "lerna run bootstrap --stream",
+    "start:dev": "lerna run start:dev --stream",
+    "prisma:studio": "lerna run prisma:studio --stream",
+    "prisma:db:push": "lerna run prisma:db:push --stream",
+    "prisma:db:seed": "lerna run prisma:db:seed --stream"
+  },
   "dependencies": {},
   "devDependencies": {
     "lerna": "^7.1.1"

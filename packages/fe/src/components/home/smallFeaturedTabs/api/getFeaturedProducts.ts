@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 import { axios } from '@/lib/axios';
 import { ExtractFnReturnType, QueryConfig } from '@/lib/react-query';
 
-import { ProductsPaginated } from '@/features/smallFeaturedTabs/types';
+import { ProductsPaginated } from '@/components/home/smallFeaturedTabs/types';
 export const getFeaturedProducts = (): Promise<ProductsPaginated> => {
   return axios.get('products/featured?limit=20&offset=1');
 };

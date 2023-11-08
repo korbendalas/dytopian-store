@@ -1,8 +1,8 @@
 import * as React from 'react';
 
+import { Featured } from '@/components/home/smallFeaturedTabs/components/featured';
+import { ProductsGrid } from '@/components/home/smallFeaturedTabs/productsGrid';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Featured } from '@/features/smallFeaturedTabs/components/featured';
-import { ProductsGrid } from '@/features/smallFeaturedTabs/productsGrid';
 import { cn } from '@/lib/cn';
 
 interface ComponentExampleProps extends React.HTMLAttributes<HTMLDivElement> {

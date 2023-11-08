@@ -4,7 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --host",
+    "bootstrap": "yarn install",
+    "start": "vite",
+    "start:dev": "vite --host",
+    "test": "jest",
     "generate:types": "node src/api/get-types-from-be/index.cjs",
     "build": "tsc && vite build",
     "preview": "vite preview",

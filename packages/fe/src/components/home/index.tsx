@@ -1,6 +1,6 @@
 import { LargeFeaturedProduct } from '@/components/home/largeFeaturedProduct';
 import { PageWrap } from '@/components/wrap/pageWrap';
-import { SmallFeaturedTabs } from '../../features/smallFeaturedTabs';
+import { SmallFeaturedTabs } from './smallFeaturedTabs';
 
 export const HomePage = () => {
   return (

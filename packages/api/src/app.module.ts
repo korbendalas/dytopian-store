@@ -28,11 +28,12 @@ import { RemovePasswordInterceptor } from './modules/user/interceptors/removePas
     }),
     AccessControlModule.forRoles(RBAC_POLICY),
     CacheModule.register<ClientOpts>({
+      store: redisStore,
       isGlobal: true,
       ttl: 60,
-      store: redisStore,
       host: 'localhost',
       port: 6379,
+      // url: 'redis://localhost:6379',
       //  host: 'redis://localhost:6379', // process.env.REDIS_HOST,
       //port: Number(process.env.REDIS_PORT),
       // ttl: Number(process.env.REDIS_TTL),

@@ -1,14 +1,14 @@
 import { ModeToggle } from '@/components';
+import { useGetCart } from '@/components/home/shoppingCart/api/getCart';
+import { ShoppingCartDropdownNav } from '@/components/home/shoppingCart/shoppingCartDropdownNav';
 import { Icons } from '@/components/icons';
 import { NotificationBadge } from '@/components/notificationBadge';
 import { Button } from '@/components/ui';
 import { Search } from '@/components/ui/search';
 import { PageWrap } from '@/components/wrap/pageWrap';
 import { useAuth } from '@/context/auth/authContextProvider';
-import { useGetCart } from '@/features/shoppingCart/api/getCart';
-import { ShoppingCartDropdownNav } from '@/features/shoppingCart/shoppingCartDropdownNav';
 import { Link } from 'react-router-dom';
-import { UserDropdownNav } from '../../features/userDropdownNav';
+import { UserDropdownNav } from '../userDropdownNav';
 
 export const TopHeader = () => {
   const { isLoggedIn } = useAuth();

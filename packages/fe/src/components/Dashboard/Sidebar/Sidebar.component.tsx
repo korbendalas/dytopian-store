@@ -1,3 +1,4 @@
+import { SidebarItem } from '@/components/Dashboard/Dashboard.types';
 import {
   Accordion,
   AccordionContent,
@@ -7,7 +8,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/cn';
-import { SidebarItem } from '@/pages';
 import { Link } from 'react-router-dom';
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
