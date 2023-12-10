@@ -1,4 +1,4 @@
-# dytopian-store
+# dystopian-store
 
 ## Description
 We use Lerna Monorepo to manage our packages. This is the root package.
