@@ -10,12 +10,10 @@
   },
   "scripts": {
     "bootstrap": "yarn install",
-    "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "generate:types": "npx openapi-typescript openapi.json --output src/generated/schema.d.ts --verbose",
     "start": "nest start",
-    "start:backend": "NODE_ENV=production && nest start",
     "start:dev": "NODE_ENV=development && nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/src/main",
@@ -27,7 +25,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prisma:studio": "npx prisma studio",
     "prisma:db:push": "npx prisma db push --accept-data-loss",
-    "prisma:db:seed": "ts-node prisma/db.script.ts && npx prisma db push --accept-data-loss && ts-node prisma/seed.ts"
+    "prisma:db:seed": "npx ts-node prisma/db.script.ts && npx prisma db push --accept-data-loss && ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@nestjs/cache-manager": "^2.0.0",
