@@ -12,6 +12,7 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "generate:types": "npx openapi-typescript openapi.json --output src/generated/schema.d.ts --verbose",
     "start": "nest start ",
+    "start:backend": "nest start ",
     "start:dev": "NODE_ENV=development  && nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/src/main",
