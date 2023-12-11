@@ -5,13 +5,9 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
-  "workspaces": {
-    "nohoist": [
-      "**"
-    ]
-  },
   "scripts": {
     "bootstrap": "yarn install",
+    "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "generate:types": "npx openapi-typescript openapi.json --output src/generated/schema.d.ts --verbose",
