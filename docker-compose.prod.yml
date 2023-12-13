@@ -46,7 +46,7 @@ services:
   frontend:
     build:
       context: ./packages/fe
-      dockerfile: Dockerfile  # The Dockerfile for your frontend
+      dockerfile: ./Dockerfile  # The Dockerfile for your frontend
     ports:
       - "80:80"
 
@@ -54,9 +54,9 @@ services:
   api:
     build:
       context: ./packages/api
-      dockerfile: Dockerfile  # The Dockerfile for your backend
+      dockerfile: ./Dockerfile  # The Dockerfile for your backend
 #    environment:
-#    # Set your environment variables here
+    # Set your environment variables here
     ports:
       - "4000:4000"
 

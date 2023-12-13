@@ -5,7 +5,7 @@ FROM node:18.19.0-alpine AS builder
 WORKDIR /app
 
 # Copy package.json and yarn.lock to the working directory
-COPY ./package.json ./yarn.lock ./
+COPY ./package.json ../../yarn.lock ./
 
 
 # Install dependencies
