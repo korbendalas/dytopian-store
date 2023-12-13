@@ -1,9 +1,6 @@
 # Use a Node.js base image with a specified version
 FROM node:18.19.0-alpine
 
-# Install Yarn globally
-RUN npm install -g yarn
-
 # Create and set the working directory
 WORKDIR /api
 
