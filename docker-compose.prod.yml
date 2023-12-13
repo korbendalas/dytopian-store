@@ -53,8 +53,11 @@ services:
   api:
     build:
       dockerfile: packages/api/Dockerfile  # The Dockerfile for your backend
-#    environment:
-    # Set your environment variables here
+    environment:
+      DATABASE_URL: postgres://${DB_USER}:${DB_PASS}@db:5432/${DB_NAME}
+    depends_on:
+      - db
+      - redis
     ports:
       - "4000:4000"
 
