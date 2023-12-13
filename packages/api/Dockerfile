@@ -22,7 +22,7 @@ RUN yarn build
 RUN yarn global add pm2
 
 # Expose the port that your NestJS app is running on
-EXPOSE 4000   //perflex lepak za
+EXPOSE 4000
 
 # Command to run the application using PM2
 CMD ["pm2-runtime", "start", "dist/main.js", "--name", "nestjs-app", "--watch"]
