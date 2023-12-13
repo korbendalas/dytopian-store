@@ -1,25 +1,25 @@
-# Use a Node.js base image with a specified version
-FROM node:18.19.0-alpine
+FROM node:18-alpine AS builder
 
-# Create and set the working directory
 WORKDIR /api
 
-# Copy the package.json and yarn.lock files
-COPY ./package.json ./
-# Install dependencies
-RUN yarn install --production
+COPY ../yarn.lock .
 
-# Copy the rest of the application code
-COPY . .
+COPY packages/api/package.json .
+RUN yarn install --frozen-lockfile
 
-# Build the NestJS application
+COPY packages/api ./
+
 RUN yarn build
 
-# Install PM2 globally
-RUN yarn global add pm2
+FROM node:18-alpine AS prod
 
-# Expose the port that your NestJS app is running on
-EXPOSE 4000
+WORKDIR /api
 
-# Command to run the application using PM2
-CMD ["pm2-runtime", "start", "dist/main.js", "--name", "nestjs-app", "--watch"]
+COPY --from=builder /api/dist ./
+
+ENV PM2_HOME=/usr/local/pm2
+ENV PATH=$PATH:$PM2_HOME/bin
+
+RUN npm install pm2@latest -g
+
+CMD ["pm2", "start", "pm2.config.js"]

@@ -45,16 +45,14 @@ services:
   # Frontend service
   frontend:
     build:
-      context: ./packages/fe
-      dockerfile: ./Dockerfile  # The Dockerfile for your frontend
+      dockerfile: packages/fe/Dockerfile  # The Dockerfile for your frontend
     ports:
       - "80:80"
 
   # Backend service
   api:
     build:
-      context: ./packages/api
-      dockerfile: ./Dockerfile  # The Dockerfile for your backend
+      dockerfile: packages/api/Dockerfile  # The Dockerfile for your backend
 #    environment:
     # Set your environment variables here
     ports:

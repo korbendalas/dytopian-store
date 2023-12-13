@@ -1,26 +1,22 @@
-# Build stage
-FROM node:18.19.0-alpine AS builder
+FROM node:18-alpine AS builder
 
-# Set the working directory in the container
 WORKDIR /app
 
-# Copy package.json and yarn.lock to the working directory
-COPY ./package.json ./
+COPY ../yarn.lock .
 
-# Copy the rest of the application code
-COPY . .
+COPY packages/fe/package.json .
+RUN yarn install --frozen-lockfile
 
-# Build the frontend app
+COPY packages/fe ./
+
 RUN yarn build
 
-# Final stage
-FROM nginx:alpine
+FROM nginx:stable-alpine AS prod
 
-# Copy the built static files from the builder stage to the nginx public directory
-COPY --from=builder /app/dist /usr/share/nginx/html
+WORKDIR /usr/share/nginx/html
 
-# Expose port 80
+COPY --from=builder /app/dist ./
+
 EXPOSE 80
 
-# Start Nginx when the container runs
 CMD ["nginx", "-g", "daemon off;"]
