@@ -11,3 +11,9 @@ Navigate to the packages folder to see the packages we have. (API and FE),
 4. Run `yarn run prisma:db:push` to push the schema to the database
 5. Run `yarn run prisma:db:seed` to seed the database
 6. Run `yarn run start:dev` to start the API and FE
+7. 
+8.
+   `docker-compose -f docker-compose.prod.yml up -d`
+run production
+9. `docker-compose -f docker-compose.prod.yml up -d --build
+   ` after git pull do this
