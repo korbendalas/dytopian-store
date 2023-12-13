@@ -1,5 +1,5 @@
-# Use an official Node.js image as the base image
-FROM node:18.19.0-alpine
+# Build stage
+FROM node:18.19.0-alpine AS builder
 
 # Set the working directory in the container
 WORKDIR /app
@@ -16,7 +16,7 @@ COPY . .
 # Build the frontend app
 RUN yarn build
 
-# Use a lightweight Nginx image as the final image
+# Final stage
 FROM nginx:alpine
 
 # Copy the built static files from the builder stage to the nginx public directory
