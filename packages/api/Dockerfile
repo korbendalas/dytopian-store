@@ -8,7 +8,7 @@ RUN npm install -g yarn
 WORKDIR /api
 
 # Copy the package.json and yarn.lock files
-COPY ./package.json ../../yarn.lock ./
+COPY ./package.json ./
 # Install dependencies
 RUN yarn install --production
 
