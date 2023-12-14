@@ -10,7 +10,7 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'http://localhost',
-      'http://localhost',
+      'http://localhost:3000',
       'https://dystopian.daliborpetric.com',
     ], // Allow requests from this origin
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
