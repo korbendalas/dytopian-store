@@ -9,19 +9,17 @@ RUN yarn install --frozen-lockfile
 
 COPY packages/fe ./
 
-# Copy the .env file into the builder stage
-COPY .env .env
+# Install dotenv
+RUN yarn add dotenv --dev
 
-RUN yarn build
+# Run dotenv to load environment variables
+CMD ["yarn", "dotenv", "yarn", "build"]
 
 FROM nginx:stable-alpine AS prod
 
 WORKDIR /usr/share/nginx/html
 
 COPY --from=builder /app/dist ./
-
-# Copy the .env file into the prod stage
-COPY .env .env
 
 EXPOSE 80
 
