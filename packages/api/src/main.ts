@@ -7,7 +7,15 @@ import { AtGuard } from './common/guards/at.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors();
+  app.enableCors({
+    origin: [
+      'http://localhost',
+      'http://localhost:3000',
+      'https://dystopian.daliborpetric.com',
+    ], // Allow requests from this origin
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
   app.setGlobalPrefix('/api/v1');
 
   const port = process.env.PORT || 4000;
