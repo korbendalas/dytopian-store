@@ -50,6 +50,28 @@ async function seed() {
     users.push(user);
   }
 
+  const OSSUsers = [];
+  for (let i = 0; i < 100; i++) {
+    const user = {
+      firstName: randUser().firstName,
+      lastName: randUser().lastName,
+      username: randUser().username,
+      email: 'ossuser' + i + '@example.com',
+      password: await bcrypt.hash(
+        'test@123',
+        Number(process.env.BCRYPT_SALT_ROUNDS) || 10,
+      ),
+      userType: rand([
+        UserType.ADMIN,
+        UserType.MODERATOR,
+        UserType.MANAGER,
+        UserType.SUPPORT,
+      ]),
+    };
+
+    OSSUsers.push(user);
+  }
+
   //create seed function for categories using the following schema model in prisma.schema and categoriesData array
   //refactor it to use the categoriesData array with map function
   const categories = categoriesData.map((category) => {
@@ -73,6 +95,11 @@ async function seed() {
       data: users,
     });
     console.log('createdUsers successfully:', createdUsers);
+
+    const createdOSSUsers = await prisma.oSSUser.createMany({
+      data: OSSUsers,
+    });
+    console.log('createdOSSUsers successfully:', createdOSSUsers);
 
     if (createdUsers) {
       const getUsers = await prisma.user.findMany();

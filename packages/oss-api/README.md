@@ -1,0 +1,1 @@
+azuriraj redis kontejner i proveri sto puca konekcija
