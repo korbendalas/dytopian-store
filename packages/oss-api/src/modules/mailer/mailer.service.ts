@@ -7,8 +7,8 @@ import { ITemplatedData } from './interfaces/template-data.interface';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { ITemplates } from './interfaces/templates.interface';
-import { User } from '@prisma/client';
 import Handlebars from 'handlebars';
+import { OSSUser } from '@prisma/client';
 
 @Injectable()
 export class MailerService {
@@ -24,10 +24,10 @@ export class MailerService {
     this.email = `"My App" <${emailConfig.auth.user}>`;
     this.domain = this.configService.get('domain');
     this.loggerService = new Logger(MailerService.name);
-    this.templates = {
-      confirmation: MailerService.parseTemplate('confirmation.hbs'),
-      resetPassword: MailerService.parseTemplate('reset-password.hbs'),
-    };
+    // this.templates = {
+    //   confirmation: MailerService.parseTemplate('confirmation.hbs'),
+    //   resetPassword: MailerService.parseTemplate('reset-password.hbs'),
+    // };
   }
 
   private static parseTemplate(
@@ -56,17 +56,17 @@ export class MailerService {
       .then(() => this.loggerService.log(log ?? 'A new email was sent.'))
       .catch((error) => this.loggerService.error(error));
   }
-  public sendConfirmationEmail(user: User, token: string): void {
-    const { email, firstName } = user;
-    const subject = 'Confirm your email';
-    const html = this.templates.confirmation({
-      name: firstName,
-      link: `${this.domain.backend}/api/v1/auth/confirm/${token}`,
-    });
-    this.sendEmail(email, subject, html, 'A new confirmation email was sent.');
-  }
+  // public sendConfirmationEmail(user: User, token: string): void {
+  //   const { email, firstName } = user;
+  //   const subject = 'Confirm your email';
+  //   const html = this.templates.confirmation({
+  //     name: firstName,
+  //     link: `${this.domain.backend}/api/v1/auth/confirm/${token}`,
+  //   });
+  //   this.sendEmail(email, subject, html, 'A new confirmation email was sent.');
+  // }
 
-  public sendResetPasswordEmail(user: User, token: string): void {
+  public sendResetPasswordEmail(user: OSSUser, token: string): void {
     const { email, firstName } = user;
     const subject = 'Reset your password';
     const html = this.templates.resetPassword({

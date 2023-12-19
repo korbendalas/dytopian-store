@@ -7,8 +7,7 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { SignupDto } from '../user/dtos/signup.dto';
 import * as bcrypt from 'bcryptjs';
-import { User, UserType } from '@prisma/client';
-import * as jwt from 'jsonwebtoken';
+import { OSSUser, UserType } from '@prisma/client';
 import { SigninDto } from '../user/dtos/signin.dto';
 import { UserResponseDTO } from '../user/dtos/response.dto';
 import { CommonService } from '../common/common.service';
@@ -46,15 +45,16 @@ export class AuthService {
     username,
     userType = UserType.MODERATOR,
   }: SignupDto): Promise<AuthResponseDto> {
-    const user = await this.prismaService.user.findUnique({
+    const user = await this.prismaService.oSSUser.findUnique({
       where: { email },
     });
+    // TODO - add email service to send user its email and password
 
     if (user) {
       throw new ConflictException();
     }
 
-    const newUser: User = await this.prismaService.user.create({
+    const newUser: OSSUser = await this.prismaService.oSSUser.create({
       data: {
         firstName,
         lastName,
@@ -72,43 +72,9 @@ export class AuthService {
     await this.updateRefreshTokenHash(newUser.id, refreshToken);
     return { token, refreshToken, user: { ...newUser } };
   }
-  async oauth(body: any): Promise<AuthResponseDto> {
-    const { email, firstName, lastName, googleId } = body;
-    const user = await this.prismaService.user.findUnique({
-      where: { googleId },
-    });
-
-    if (!user) {
-      const newUser: User = await this.prismaService.user.create({
-        data: {
-          firstName,
-          lastName,
-          email,
-          googleId,
-          username: await this.generateUsername(firstName, lastName),
-        },
-      });
-      const { accessToken: token, refreshToken } = await this.generateTokens({
-        username: newUser.username,
-        id: newUser.id,
-      });
-      delete newUser.password;
-      await this.updateRefreshTokenHash(newUser.id, refreshToken);
-      return { token, refreshToken, user: newUser };
-    }
-
-    const { accessToken: token, refreshToken } = await this.generateTokens({
-      username: user.username,
-      id: user.id,
-    });
-    delete user.password;
-    await this.updateRefreshTokenHash(user.id, refreshToken);
-    delete user.hashedRefreshToken;
-    return { token, refreshToken, user };
-  }
 
   async signin({ email, password }: SigninDto): Promise<AuthResponseDto> {
-    const user = await this.prismaService.user.findUnique({
+    const user = await this.prismaService.oSSUser.findUnique({
       where: { email },
     });
 
@@ -134,7 +100,7 @@ export class AuthService {
   }
 
   async logout(userId: number) {
-    await this.prismaService.user.updateMany({
+    await this.prismaService.oSSUser.updateMany({
       where: { id: userId, hashedRefreshToken: { not: null } },
       data: { hashedRefreshToken: null },
     });
@@ -144,7 +110,7 @@ export class AuthService {
     id: number,
     refreshToken: string,
   ): Promise<{ token: string; refreshToken: string }> {
-    const user = await this.prismaService.user.findUnique({
+    const user = await this.prismaService.oSSUser.findUnique({
       where: { id },
     });
 
@@ -186,7 +152,7 @@ export class AuthService {
     return { accessToken: token, refreshToken };
   }
   async checkUsername(username: string): Promise<boolean> {
-    const user = await this.prismaService.user.findUnique({
+    const user = await this.prismaService.oSSUser.findUnique({
       where: { username },
     });
     return !!user;
@@ -195,7 +161,7 @@ export class AuthService {
   async updateRefreshTokenHash(id: number, refreshToken: string) {
     const hashedRefreshToken = await this.hashData(refreshToken);
 
-    return this.prismaService.user.update({
+    return this.prismaService.oSSUser.update({
       where: { id },
       data: { hashedRefreshToken },
     });
@@ -203,18 +169,5 @@ export class AuthService {
 
   async hashData(data: string): Promise<string> {
     return bcrypt.hash(data, Number(process.env.BCRYPT_SALT_ROUNDS));
-  }
-
-  async generateUsername(firstName: string, lastName: string): Promise<string> {
-    const pointSlugFirstName = this.commonService.generatePointSlug(firstName);
-    const pointSlugLastName = this.commonService.generatePointSlug(lastName);
-    const pointSlug = `${pointSlugFirstName}.${pointSlugLastName}`;
-    const count = await this.prismaService.user.count({
-      where: { username: `${firstName}.${lastName}` },
-    });
-    if (count > 0) {
-      return `${pointSlug}${count}`;
-    }
-    return pointSlug;
   }
 }
