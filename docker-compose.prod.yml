@@ -61,6 +61,16 @@ services:
     ports:
       - "4000:4000"
 
+  oss-api:
+    build:
+      dockerfile: packages/oss-api/Dockerfile  # The Dockerfile for your backend
+    environment:
+      DATABASE_URL: postgres://${DB_USER}:${DB_PASS}@db:5432/${DB_NAME}
+    depends_on:
+      - db
+    ports:
+      - "4001:4001"
+
 volumes:
   db-data-user-software:
   db-test-data-user-software:

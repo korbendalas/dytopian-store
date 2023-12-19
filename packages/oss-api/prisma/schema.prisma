@@ -1,0 +1,132 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model OSSUser {
+  id                 Int             @id @default(autoincrement())
+  firstName          String
+  lastName           String
+  username           String          @unique
+  telephone          String?
+  email              String          @unique
+  password           String?
+  hashedRefreshToken String?
+  address            String?
+  city               String?
+  country            String?
+  userType           UserType        @default(USER) @map("user_type")
+  createdAt          DateTime        @default(now()) @map("created_at")
+  updatedAt          DateTime        @updatedAt @map("updated_at")
+  UserAvatar         UserAvatar[]
+  ProductImages      ProductImages[]
+
+  @@map("oss-users")
+}
+
+model Category {
+  id            Int        @id @default(autoincrement())
+  name          String
+  parentId      Int?
+  parent        Category?  @relation("Subcategories", fields: [parentId], references: [id])
+  subcategories Category[] @relation("Subcategories")
+  products      Product[]  @relation("CategoryProducts")
+
+  @@map("categories")
+}
+
+model Product {
+  id               Int               @id @default(autoincrement())
+  uuid             String            @unique @default(uuid())
+  title            String
+  price            Int
+  discountPrice    Int?
+  quantity         Int               @default(0)
+  sold             Int               @default(0)
+  brand_id         Int
+  Brand            Brand             @relation(fields: [brand_id], references: [id])
+  smallDescription String
+  largeDescription String
+  specification    String
+  categoryId       Int
+  Category         Category          @relation("CategoryProducts", fields: [categoryId], references: [id])
+  ProductImages    ProductImages[]
+  FeaturedProducts FeaturedProduct[]
+  SpecialOffers    SpecialOffer[]
+
+  @@map("products")
+}
+
+model Brand {
+  id         Int       @id @default(autoincrement())
+  name       String
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  Product    Product[]
+
+  @@map("brands")
+}
+
+model FeaturedProduct {
+  id         Int      @id @default(autoincrement())
+  product_id Int
+  Product    Product  @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("featured_products")
+}
+
+model SpecialOffer {
+  id         Int      @id @default(autoincrement())
+  product_id Int
+  Product    Product  @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  starts_at  DateTime
+  ends_at    DateTime
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("special_offers")
+}
+
+model UserAvatar {
+  id         Int      @id @default(autoincrement())
+  imgUrl     String
+  user_id    Int // uploaded by
+  User       OSSUser  @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("user_avatars")
+}
+
+model ProductImages {
+  id         Int      @id @default(autoincrement())
+  imgUrl     String
+  product_id Int
+  cover      Boolean  @default(false)
+  Product    Product  @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user_id    Int? // uploaded by
+  User       OSSUser? @relation(fields: [user_id], references: [id])
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("product_images")
+}
+
+enum UserType {
+  USER
+  ADMIN
+  MODERATOR
+  MANAGER
+  SUPPORT
+  RESTRICTED
+  AFFILIATE
+}
