@@ -24,7 +24,7 @@ export type ProductsPaginated = {
   totalCount: number;
 };
 @ApiTags('Products')
-@UseInterceptors(CacheInterceptor)
+// @UseInterceptors(CacheInterceptor)
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productService: ProductsService) {}
