@@ -1,14 +1,27 @@
 import { useState } from 'react';
-import Header from '../components/common/Header';
-import Sidebar from '../components/common/Sidebar';
+import { Header } from '@/components';
+import { Sidebar } from '@/components/UI/organisms/Sidebar';
 import { Outlet } from 'react-router-dom';
+
+const sidebarItems = [
+    {
+        route: '/dashboard',
+        label: 'Dashboard',
+        icon: 'chart-line',
+    },
+    {
+        route: '/profile',
+        label: 'Profile',
+        icon: 'user',
+    },
+];
 
 const DefaultLayout = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     return (
         <div className="flex h-screen overflow-hidden">
-            <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+            <Sidebar title="Main Menu"  items={sidebarItems} />
             <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
                 <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
                 <main>
