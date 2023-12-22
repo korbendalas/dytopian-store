@@ -49,6 +49,13 @@ services:
     ports:
       - "3000:80"
 
+  # Frontend service
+  oss:
+    build:
+      dockerfile: packages/oss/Dockerfile  # The Dockerfile for your frontend
+    ports:
+      - "3001:80"
+
   # Backend service
   api:
     build:
@@ -60,6 +67,16 @@ services:
       - redis
     ports:
       - "4000:4000"
+
+  oss-api:
+    build:
+      dockerfile: packages/oss-api/Dockerfile  # The Dockerfile for your backend
+    environment:
+      DATABASE_URL: postgres://${DB_USER}:${DB_PASS}@db:5432/${DB_NAME}
+    depends_on:
+      - db
+    ports:
+      - "4001:4001"
 
 volumes:
   db-data-user-software:
