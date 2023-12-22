@@ -28,4 +28,4 @@ ENV PATH=$PATH:$PM2_HOME/bin
 RUN npm install pm2@latest -g
 
 # Specify the command to start your application with PM2
-CMD ["sh", "-c", "cd /oss-api && yarn install --frozen-lockfile && pm2 start /oss-api/dist/src/main.js --no-daemon"]
+CMD ["sh", "-c", "cd /oss-api && yarn install --frozen-lockfile && yarn run prisma:db:push && pm2 start /oss-api/dist/src/main.js --no-daemon"]
