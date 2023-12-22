@@ -24,10 +24,10 @@ export class MailerService {
     this.email = `"My App" <${emailConfig.auth.user}>`;
     this.domain = this.configService.get('domain');
     this.loggerService = new Logger(MailerService.name);
-    // this.templates = {
-    //   confirmation: MailerService.parseTemplate('confirmation.hbs'),
-    //   resetPassword: MailerService.parseTemplate('reset-password.hbs'),
-    // };
+    this.templates = {
+      confirmation: MailerService.parseTemplate('confirmation.hbs'),
+      resetPassword: MailerService.parseTemplate('reset-password.hbs'),
+    };
   }
 
   private static parseTemplate(
