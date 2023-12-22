@@ -49,6 +49,13 @@ services:
     ports:
       - "3000:80"
 
+  # Frontend service
+  oss:
+    build:
+      dockerfile: packages/oss/Dockerfile  # The Dockerfile for your frontend
+    ports:
+      - "3001:80"
+
   # Backend service
   api:
     build:

@@ -1,13 +1,13 @@
 FROM node:18-alpine AS builder
 
-WORKDIR /app
+WORKDIR /oss
 
 COPY ../yarn.lock .
 
-COPY packages/fe/package.json .
+COPY packages/oss/package.json .
 RUN yarn install --frozen-lockfile
 
-COPY packages/fe ./
+COPY packages/oss ./
 
 # Install dotenv
 RUN yarn add dotenv --dev
@@ -19,7 +19,7 @@ FROM nginx:stable-alpine AS prod
 
 WORKDIR /usr/share/nginx/html
 
-COPY --from=builder /app/dist ./
+COPY --from=builder /oss/dist ./
 
 EXPOSE 80
 
