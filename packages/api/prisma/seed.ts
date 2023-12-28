@@ -73,7 +73,7 @@ async function seed() {
 
   // create seed function for categories using the following schema model in prisma.schema and categoriesData array
   // refactor it to use the categoriesData array with map function
-  const categories = categoriesData.map((category) => {
+  const categories = categoriesData.map((category: any) => {
     return {
       name: category.name,
       parentId: category.parentId,
@@ -83,7 +83,7 @@ async function seed() {
   //  create seed function for brands using the following schema model in prisma.schema and brandsData array using map function
   //  refactor it to use the brandsData array with map function
 
-  const brands = brandsData.map((brand) => {
+  const brands = brandsData.map((brand: any) => {
     return {
       name: brand.name,
     };

@@ -26,7 +26,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prisma:studio": "npx prisma studio",
     "prisma:db:push": "npx prisma db push --accept-data-loss",
-    "prisma:db:seed": "npx ts-node 'prisma/db.script.ts' && npx prisma db push --accept-data-loss && ts-node prisma/seed.ts"
+    "prisma:db:seed": "npx ts-node prisma/db.script.ts && npx prisma db push --accept-data-loss && ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@nestjs/cache-manager": "^2.0.0",
