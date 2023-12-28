@@ -20,7 +20,9 @@ import { AtGuard } from '../../common/guards/at.guard';
 import { RtGuard } from '../../common/guards/rt.guard';
 import { UserJwt } from '../../common/decorators/param-decorators/user-jwt.decorator';
 import { Public } from '../../common/decorators/public.decorator';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   private readonly frontendUrl: IDomain;

@@ -9,7 +9,7 @@ export class UserService {
     const user = await this.prismaService.user.findUnique({
       where: { id },
       include: {
-        UserAvatar: true,
+        userAvatar: true,
       },
     });
 
@@ -31,7 +31,7 @@ export class UserService {
       userType: user.userType,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
-      avatar: user.UserAvatar ?? [],
+      avatar: user.userAvatar ?? [],
     };
   }
 }

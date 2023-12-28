@@ -1,5 +1,4 @@
-import { PrismaClient, UserType } from '@prisma/client';
-
+import { PrismaClient, User, UserType } from '@prisma/client';
 import {
   rand,
   randAddress,
@@ -72,8 +71,8 @@ async function seed() {
     OSSUsers.push(user);
   }
 
-  //create seed function for categories using the following schema model in prisma.schema and categoriesData array
-  //refactor it to use the categoriesData array with map function
+  // create seed function for categories using the following schema model in prisma.schema and categoriesData array
+  // refactor it to use the categoriesData array with map function
   const categories = categoriesData.map((category) => {
     return {
       name: category.name,
@@ -81,8 +80,8 @@ async function seed() {
     };
   });
 
-  //create seed function for brands using the following schema model in prisma.schema and brandsData array using map function
-  //refactor it to use the brandsData array with map function
+  //  create seed function for brands using the following schema model in prisma.schema and brandsData array using map function
+  //  refactor it to use the brandsData array with map function
 
   const brands = brandsData.map((brand) => {
     return {
@@ -107,7 +106,7 @@ async function seed() {
       const userImages = getUsers.map((user) => {
         return {
           imgUrl: `https://example.com/image-${user.id}.jpg`,
-          user_id: user.id,
+          userId: user.id,
         };
       });
 
@@ -137,7 +136,7 @@ async function seed() {
           discountPrice: rand([null, randNumber({ min: 100, max: 1000 })]),
           quantity: randNumber({ min: 1, max: 200 }),
           sold: randNumber({ min: 1, max: 100 }),
-          brand_id: rand([...getBrands.map((b) => b.id)]),
+          brandId: rand([...getBrands.map((b) => b.id)]),
           smallDescription: randTextRange({ min: 50, max: 100 }),
           largeDescription: randTextRange({ min: 200, max: 1000 }),
           specification: randProductDescription(),
@@ -160,7 +159,7 @@ async function seed() {
         const getProducts = await prisma.product.findMany();
         for (let i = 0; i < 20; i++) {
           const featuredProduct = {
-            product_id: rand([...getProducts.map((p) => p.id)]),
+            productId: rand([...getProducts.map((p) => p.id)]),
           };
           featuredProducts.push(featuredProduct);
         }
@@ -169,8 +168,8 @@ async function seed() {
           for (let j = 0; j < 4; j++) {
             const productImage = {
               imgUrl: `https://picsum.photos/id/${i}/200/300`,
-              product_id: rand([...getProducts.map((p) => p.id)]),
-              user_id: rand([...getUsers.map((u) => u.id)]),
+              productId: rand([...getProducts.map((p) => p.id)]),
+              userId: rand([...getUsers.map((u) => u.id)]),
               cover: j === 0,
             };
             productImages.push(productImage);
@@ -179,10 +178,10 @@ async function seed() {
 
         for (let i = 0; i < 20; i++) {
           const specialOffer = {
-            product_id: rand([...getProducts.map((p) => p.id)]),
-            starts_at: toDate(new Date()),
+            productId: rand([...getProducts.map((p) => p.id)]),
+            startsAt: toDate(new Date()),
             // end date is between 3 and 6 days from now
-            ends_at: addDays(new Date(), randNumber({ min: 3, max: 6 })),
+            endsAt: addDays(new Date(), randNumber({ min: 3, max: 6 })),
           };
           specialOffers.push(specialOffer);
         }

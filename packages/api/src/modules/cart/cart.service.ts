@@ -15,26 +15,26 @@ export class CartService {
   async getCart(user) {
     const cart = await this.prismaService.cartItem.findMany({
       where: {
-        user_id: user.id,
+        userId: user.id,
       },
       include: {
-        Product: {
+        product: {
           include: {
-            ProductImages: true,
+            productImages: true,
           },
         },
       },
     });
 
     return cart.map((item) => ({
-      ...item.Product,
-      images: item.Product.ProductImages,
-      brandId: item.Product.brand_id,
-      productId: item.product_id,
+      ...item.product,
+      images: item.product.productImages,
+      brandId: item.product.brandId,
+      productId: item.productId,
       quantity: item.quantity,
-      createdAt: item.created_at,
-      updatedAt: item.updated_at,
-      userId: item.user_id,
+      createdAt: item.createdAt,
+      updatedAt: item.updatedAt,
+      userId: item.userId,
     }));
   }
 
@@ -42,7 +42,7 @@ export class CartService {
     const product = await this.getProductById(productId);
     const cartItems = await this.prismaService.cartItem.findMany({
       where: {
-        user_id: user.id,
+        userId: user.id,
       },
     });
 
@@ -51,15 +51,15 @@ export class CartService {
     }
 
     // check if array of cart items includes the product id
-    const cartItem = cartItems.find((item) => item.product_id === productId);
+    const cartItem = cartItems.find((item) => item.productId === productId);
     if (cartItem) {
       throw new BadRequestException('You cannot add the same product twice');
     }
 
     const cart = await this.prismaService.cartItem.create({
       data: {
-        user_id: user.id,
-        product_id: productId,
+        userId: user.id,
+        productId: productId,
         quantity,
       },
     });
@@ -67,12 +67,12 @@ export class CartService {
     return cart;
   }
 
-  async removeFromCart(user, product_id) {
+  async removeFromCart(user, productId) {
     const cart = await this.prismaService.cartItem.delete({
       where: {
-        user_id_product_id: {
-          user_id: user.id,
-          product_id,
+        userId_productId: {
+          userId: user.id,
+          productId,
         },
       },
     });
@@ -80,12 +80,12 @@ export class CartService {
     return cart;
   }
 
-  async updateCart(user, product_id, quantity) {
+  async updateCart(user, productId, quantity) {
     const cart = await this.prismaService.cartItem.update({
       where: {
-        user_id_product_id: {
-          user_id: user.id,
-          product_id,
+        userId_productId: {
+          userId: user.id,
+          productId,
         },
       },
       data: {
