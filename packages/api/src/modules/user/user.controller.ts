@@ -5,7 +5,9 @@ import {
 } from '../../common/decorators/param-decorators/user-db.decorator';
 import { UserService } from '../user/user.service';
 import { UserJwt } from '../../common/decorators/param-decorators/user-jwt.decorator';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Me')
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}

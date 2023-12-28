@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -7,17 +8,19 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Put,
   Query,
   UseInterceptors,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
-import { Product } from '@prisma/client';
+import { Brand, Category, Product } from '@prisma/client';
 import { Public } from '../../common/decorators/public.decorator';
 
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { UseRoles } from 'nest-access-control';
 import { RbacPolicy } from '../auth/rbac-policy';
 import { CacheInterceptor, CacheKey, CacheTTL } from '@nestjs/cache-manager';
+import { CreateProductDTO } from './dtos/create-product.dto';
 
 export type ProductsPaginated = {
   productsList: Product[];
@@ -33,7 +36,6 @@ export class ProductsController {
   @ApiQuery({ name: 'offset', required: true, type: Number, example: 1 })
   // @ApiCreatedResponse({ type: ProductsPaginated })
   @CacheTTL(10)
-  @Public()
   @CacheKey('all-products')
   @Get()
   async getProducts(
@@ -46,7 +48,6 @@ export class ProductsController {
   @ApiQuery({ name: 'limit', required: true, type: Number, example: 20 })
   @ApiQuery({ name: 'offset', required: true, type: Number, example: 1 })
   @Get('featured')
-  @Public()
   async getFeaturedProducts(
     @Query('limit', new ParseIntPipe()) limit = 20,
     @Query('offset', new ParseIntPipe()) offset = 1,
@@ -60,28 +61,42 @@ export class ProductsController {
   //   return this.productService.getProductById(id);
   // }
 
-  @Public()
-  @Get(':uuid')
+  @Get('/:uuid')
   async getProductByUUID(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
     return this.productService.getProductByUuid(uuid);
   }
+
+  @Public()
   @Post()
-  createProduct() {
-    return 'This action adds a new product';
+  createProduct(@Body() product: CreateProductDTO) {
+    return this.productService.createProduct(product);
   }
 
-  @Patch(':id')
-  updateProduct() {
-    return 'This action updates a product';
+  @Put('/:uuid')
+  updateProduct(
+    @Param('uuid', new ParseUUIDPipe()) uuid: string,
+    @Body() product: CreateProductDTO,
+  ) {
+    return this.productService.updateProduct(uuid, product);
   }
 
-  @UseRoles({
-    resource: RbacPolicy.PRODUCTS,
-    action: 'delete',
-    possession: 'any',
-  })
-  @Delete(':id')
-  deleteProduct(@Param('id', new ParseIntPipe()) id: number) {
-    return this.productService.deleteProduct(id);
+  // @UseRoles({
+  //   resource: RbacPolicy.PRODUCTS,
+  //   action: 'delete',
+  //   possession: 'any',
+  // })
+  @Delete(':uuid')
+  deleteProduct(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
+    return this.productService.deleteProduct(uuid);
+  }
+
+  @Get('brands')
+  async getBrands(): Promise<Brand[]> {
+    return this.productService.getBrands();
+  }
+
+  @Get('categories')
+  async getCategories(): Promise<Category[]> {
+    return this.productService.getCategories();
   }
 }

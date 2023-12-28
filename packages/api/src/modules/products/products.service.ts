@@ -24,11 +24,11 @@ export class ProductsService {
         skip: (offset - 1) * limit, // Calculate the number of items to skip based on the page and page size
         take: limit, //
         select: {
-          Product: {
+          product: {
             include: {
-              Brand: true,
-              Category: true,
-              ProductImages: true,
+              brand: true,
+              category: true,
+              productImages: true,
             },
           },
         },
@@ -36,20 +36,20 @@ export class ProductsService {
 
       // // Modify the result to use lowercase property names
       const productsList = products.map((featuredProduct) => ({
-        id: featuredProduct.Product.id,
-        uuid: featuredProduct.Product.uuid,
-        title: featuredProduct.Product.title,
-        price: featuredProduct.Product.price,
-        discountPrice: featuredProduct.Product.discountPrice,
-        quantity: featuredProduct.Product.quantity,
-        sold: featuredProduct.Product.sold,
-        smallDescription: featuredProduct.Product.smallDescription,
-        largeDescription: featuredProduct.Product.largeDescription,
-        specification: featuredProduct.Product.specification,
-        categoryId: featuredProduct.Product.categoryId,
-        brand: featuredProduct.Product.Brand,
-        category: featuredProduct.Product.Category,
-        images: featuredProduct.Product.ProductImages,
+        id: featuredProduct.product.id,
+        uuid: featuredProduct.product.uuid,
+        title: featuredProduct.product.title,
+        price: featuredProduct.product.price,
+        discountPrice: featuredProduct.product.discountPrice,
+        quantity: featuredProduct.product.quantity,
+        sold: featuredProduct.product.sold,
+        smallDescription: featuredProduct.product.smallDescription,
+        largeDescription: featuredProduct.product.largeDescription,
+        specification: featuredProduct.product.specification,
+        categoryId: featuredProduct.product.categoryId,
+        brand: featuredProduct.product.brand,
+        category: featuredProduct.product.category,
+        images: featuredProduct.product.productImages,
       }));
 
       const totalCount = await prisma.product.count();
@@ -62,9 +62,9 @@ export class ProductsService {
     const product = await this.prismaService.product.findUnique({
       where: { uuid },
       include: {
-        Brand: true,
-        Category: true,
-        ProductImages: true,
+        brand: true,
+        category: true,
+        productImages: true,
       },
     });
 
@@ -80,18 +80,18 @@ export class ProductsService {
       largeDescription: product.largeDescription,
       specification: product.specification,
       categoryId: product.categoryId,
-      brand: product.Brand,
-      category: product.Category,
-      images: product.ProductImages,
+      brand: product.brand,
+      category: product.category,
+      images: product.productImages,
     };
   }
   async getProductById(id: number) {
     const product = await this.prismaService.product.findUnique({
       where: { id },
       include: {
-        Brand: true,
-        Category: true,
-        ProductImages: true,
+        brand: true,
+        category: true,
+        productImages: true,
       },
     });
 
@@ -107,9 +107,9 @@ export class ProductsService {
       largeDescription: product.largeDescription,
       specification: product.specification,
       categoryId: product.categoryId,
-      brand: product.Brand,
-      category: product.Category,
-      images: product.ProductImages,
+      brand: product.brand,
+      category: product.category,
+      images: product.productImages,
     };
   }
   async createProduct() {

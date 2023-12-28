@@ -335,6 +335,9 @@
           },
           "username": {
             "type": "string"
+          },
+          "userType": {
+            "type": "string"
           }
         },
         "required": [
@@ -342,7 +345,8 @@
           "lastName",
           "email",
           "password",
-          "username"
+          "username",
+          "userType"
         ]
       },
       "SigninDto": {
