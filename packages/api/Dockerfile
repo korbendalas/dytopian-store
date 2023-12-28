@@ -16,12 +16,12 @@ FROM node:18-alpine AS prod
 
 WORKDIR /
 
+
 COPY --from=builder /api/dist ./api/dist
 COPY --from=builder /api/package.json ./api/
 COPY --from=builder /api/yarn.lock ./api/
-COPY --from=builder /api/prisma/schema.prisma ./api/
-COPY --from=builder /api/prisma/seed.ts ./api/
-COPY --from=builder /api/prisma/db.script.ts ./api/
+COPY --from=builder /api/prisma/ ./api/prisma/
+
 COPY --from=builder /api/.env ./api/
 
 ENV PM2_HOME=/usr/local/pm2
