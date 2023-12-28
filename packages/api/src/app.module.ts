@@ -19,6 +19,7 @@ import { CommonModule } from './modules/common/common.module';
 import { MailerModule } from './modules/mailer/mailer.module';
 import { ProductsModule } from './modules/products/products.module';
 import { RemovePasswordInterceptor } from './modules/user/interceptors/removePassword.interceptor';
+import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 
 @Module({
   imports: [
@@ -48,11 +49,16 @@ import { RemovePasswordInterceptor } from './modules/user/interceptors/removePas
   ],
   controllers: [AppController],
   providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ResponseInterceptor,
+    },
     AppService,
     // {
     //   provide: APP_INTERCEPTOR,
     //   useClass: UserInterceptor,
     // },
+
     { provide: APP_INTERCEPTOR, useClass: RemovePasswordInterceptor },
     { provide: APP_GUARD, useClass: AtGuard },
     { provide: APP_GUARD, useClass: ACGuard },

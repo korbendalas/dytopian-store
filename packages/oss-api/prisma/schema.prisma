@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,48 +9,49 @@ datasource db {
 
 model User {
   id                 Int                 @id @default(autoincrement())
-  firstName          String
-  lastName           String
+  firstName          String              @map("first_name")
+  lastName           String              @map("last_name")
   username           String              @unique
   telephone          String?
   email              String              @unique
   password           String?
-  hashedRefreshToken String?
+  hashedRefreshToken String?             @map("hashed_refresh_token")
   address            String?
   city               String?
   country            String?
-  zipCode            String?
-  googleId           String?             @unique
-  facebookId         String?             @unique
-  githubId           String?             @unique
-  Favorites          Favorites[]
+  zipCode            String?             @map("zip_code")
+  googleId           String?             @unique @map("google_id")
+  facebookId         String?             @unique @map("facebook_id")
+  githubId           String?             @unique @map("github_id")
+  favorites          Favorites[]
   userType           UserType            @default(USER) @map("user_type")
   createdAt          DateTime            @default(now()) @map("created_at")
   updatedAt          DateTime            @updatedAt @map("updated_at")
-  UserAvatar         UserAvatar[]
-  ProductImages      ProductImages[]
-  BlacklistedTokens  BlacklistedTokens[]
-  CartItem           CartItem[]
+  userAvatar         UserAvatar[]
+  productImages      ProductImages[]
+  blacklistedTokens  BlacklistedTokens[]
+  cartItems          CartItem[]
 
   @@map("users")
 }
 
 model OSSUser {
   id                 Int             @id @default(autoincrement())
-  firstName          String
-  lastName           String
+  firstName          String          @map("first_name")
+  lastName           String          @map("last_name")
   username           String          @unique
+  telephone          String?
   email              String          @unique
   password           String?
-  hashedRefreshToken String?
+  hashedRefreshToken String?         @map("hashed_refresh_token")
   address            String?
   city               String?
   country            String?
   userType           UserType        @default(USER) @map("user_type")
   createdAt          DateTime        @default(now()) @map("created_at")
   updatedAt          DateTime        @updatedAt @map("updated_at")
-  OSSUserAvatar      OSSUserAvatar[]
-  ProductImages      ProductImages[]
+  ossUserAvatar      OSSUserAvatar[]
+  productImages      ProductImages[]
 
   @@map("oss_users")
 }
@@ -61,20 +59,20 @@ model OSSUser {
 // create blacklistedtokens table, with composite key of token_id and user_id
 
 model BlacklistedTokens {
-  token_id   String   @default(uuid())
-  user_id    Int
-  User       User     @relation(fields: [user_id], references: [id])
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  tokenId   String   @default(uuid())
+  userId    Int      @map("user_id")
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@id([user_id, token_id])
+  @@id([userId, tokenId])
   @@map("blacklisted_tokens")
 }
 
 model Category {
   id            Int        @id @default(autoincrement())
   name          String
-  parentId      Int?
+  parentId      Int?       @map("parent_id")
   parent        Category?  @relation("Subcategories", fields: [parentId], references: [id])
   subcategories Category[] @relation("Subcategories")
   products      Product[]  @relation("CategoryProducts")
@@ -87,104 +85,104 @@ model Product {
   uuid             String            @unique @default(uuid())
   title            String
   price            Int
-  discountPrice    Int?
+  discountPrice    Int?              @map("discount_price")
   quantity         Int               @default(0)
   sold             Int               @default(0)
-  brand_id         Int
-  Brand            Brand             @relation(fields: [brand_id], references: [id])
-  smallDescription String
-  largeDescription String
+  brandId          Int               @map("brand_id")
+  brand            Brand             @relation(fields: [brandId], references: [id])
+  smallDescription String            @map("small_description")
+  largeDescription String            @map("large_description")
   specification    String
-  categoryId       Int
-  Category         Category          @relation("CategoryProducts", fields: [categoryId], references: [id])
-  Favorites        Favorites[]
-  ProductImages    ProductImages[]
-  FeaturedProducts FeaturedProduct[]
-  SpecialOffers    SpecialOffer[]
-  CartItem         CartItem[]
+  categoryId       Int               @map("category_id")
+  category         Category          @relation("CategoryProducts", fields: [categoryId], references: [id])
+  favorites        Favorites[]
+  productImages    ProductImages[]
+  featuredProducts FeaturedProduct[]
+  specialOffers    SpecialOffer[]
+  cartItems        CartItem[]
 
   @@map("products")
 }
 
 model Brand {
-  id         Int       @id @default(autoincrement())
-  name       String
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  Product    Product[]
+  id        Int       @id @default(autoincrement())
+  name      String
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  products  Product[]
 
   @@map("brands")
 }
 
 model FeaturedProduct {
-  id         Int      @id @default(autoincrement())
-  product_id Int
-  Product    Product  @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  productId Int      @map("product_id")
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("featured_products")
 }
 
 model SpecialOffer {
-  id         Int      @id @default(autoincrement())
-  product_id Int
-  Product    Product  @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  starts_at  DateTime
-  ends_at    DateTime
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  productId Int      @map("product_id")
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  startsAt  DateTime @map("starts_at")
+  endsAt    DateTime @map("ends_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("special_offers")
 }
 
 model Favorites {
-  id         Int      @id @default(autoincrement())
-  user_id    Int
-  product_id Int
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  User       User?    @relation(fields: [user_id], references: [id])
-  Product    Product  @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  productId Int      @map("product_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  user      User?    @relation(fields: [userId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("favorites")
 }
 
 model UserAvatar {
-  id          Int      @id @default(autoincrement())
-  imgUrl      String
-  user_id     Int // uploaded by
-  oss_user_id Int?
-  User        User     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  imgUrl    String   @map("img_url")
+  userId    Int      @map("user_id") // uploaded by
+  ossUserId Int?     @map("oss_user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("user_avatars")
 }
 
 model OSSUserAvatar {
-  id          Int      @id @default(autoincrement())
-  imgUrl      String
-  oss_user_id Int?
-  OSSUser     OSSUser? @relation(fields: [oss_user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  imgUrl    String   @map("img_url")
+  ossUserId Int?     @map("oss_user_id")
+  ossUser   OSSUser? @relation(fields: [ossUserId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("oss_user_avatars")
 }
 
 model ProductImages {
-  id         Int      @id @default(autoincrement())
-  imgUrl     String
-  product_id Int
-  cover      Boolean  @default(false)
-  Product    Product  @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  user_id    Int? // uploaded by
-  User       User?    @relation(fields: [user_id], references: [id])
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  OSSUser    OSSUser? @relation(fields: [oSSUserId], references: [id])
-  oSSUserId  Int?
+  id        Int      @id @default(autoincrement())
+  imgUrl    String   @map("img_url")
+  productId Int      @map("product_id")
+  cover     Boolean  @default(false)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId    Int?     @map("user_id")
+  user      User?    @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  ossUser   OSSUser? @relation(fields: [ossUserId], references: [id])
+  ossUserId Int?     @map("oss_user_id")
 
   @@map("product_images")
 }
@@ -192,15 +190,15 @@ model ProductImages {
 // prisma model to store user's cart items with composite key of user_id and productUuid
 
 model CartItem {
-  user_id    Int
-  product_id Int
-  quantity   Int
-  User       User     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  Product    Product  @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  userId    Int      @map("user_id")
+  productId Int      @map("product_id")
+  quantity  Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@id([user_id, product_id])
+  @@id([userId, productId])
   @@map("cart_items")
 }
 
