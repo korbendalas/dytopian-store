@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import {useSidebarStore } from '@/store/sidebarStore'
+import {useSidebarStore } from '@/store'
 
 export const Header = () => {
     const { sidebarOpen, toggleSidebar } = useSidebarStore();
