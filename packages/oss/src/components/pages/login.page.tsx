@@ -43,6 +43,7 @@ export const LoginPage = () => {
             mutationFn: (userData: LoginInput) => post(SIGNIN_URL, userData),
             onMutate(variables) {
                 store.setRequestLoading(true);
+                store.setAuthUser(variables);
             },
             onSuccess: () => {
                 store.setRequestLoading(false);

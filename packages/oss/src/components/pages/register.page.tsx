@@ -1,13 +1,10 @@
-"use client";
-import { object, string, TypeOf, z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, FormProvider, SubmitHandler } from "react-hook-form";
 import { useEffect } from "react";
 import {FormInput} from "@/components/UI/atoms/FormInput";
 import { LoadingButton } from "@/components/UI/atoms/LoadingButton";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import { signUpUserFn } from "@/api/authApi";
+import { post } from "@/api/config/requests";
 import {useAuthStore} from "@/store";
 import { useMutation } from "@tanstack/react-query";
 import {Message} from "@/components/UI/atoms/Message";
@@ -24,7 +21,6 @@ export const RegisterPage = () => {
     const store = useAuthStore();
 
     const methods = useForm<RegisterInput>();
-    console.log(store, methods)
     // debugger;
     // ? Calling the Register Mutation
     const {
@@ -33,7 +29,7 @@ export const RegisterPage = () => {
         isSuccess,
     } = useMutation(
         {
-        mutationFn: signUpUserFn,
+        mutationFn: post,
         onMutate(variables) {
             store.setRequestLoading(true);
         },

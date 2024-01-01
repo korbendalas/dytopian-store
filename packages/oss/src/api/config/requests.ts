@@ -1,18 +1,6 @@
-import axios, { AxiosRequestConfig, AxiosInstance } from 'axios';
+import baseAxiosInstance from '@/components/UI/atoms/axiosConfig'
+import { generateUpdatedConfig, AxiosConfig } from '@/components/UI/atoms/UpdateConfigUtilis';
 import { saveToken, getToken, removeToken } from '@/utilis/tokenUtilis'
-
-type AxiosConfig = AxiosRequestConfig | undefined;
-
-function filterInvalidParams(params: Record<string, any>): Record<string, any> {
-    // Filter out undefined or null values from the params object
-    const filteredParams: Record<string, any> = {};
-    for (const key in params) {
-        if (params[key] !== undefined && params[key] !== null) {
-            filteredParams[key] = params[key];
-        }
-    }
-    return filteredParams;
-}
 
 export class CustomError extends Error {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -24,12 +12,6 @@ export class CustomError extends Error {
         this.response = response;
     }
 }
-const baseAxiosInstance: AxiosInstance = axios.create({
-    baseURL: 'https://dystopian-oss-api.daliborpetric.com/api/v1/',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-});
 
 const handleError = (error: any) => {
     // Handle errors as needed
@@ -45,16 +27,7 @@ export function get<T>(
     ): Promise<T> {
     // Get the token from localStorage
     const token = getToken();
-
-    // Include the token in the request headers
-    const headers = {
-        ...config?.headers,
-        Authorization: `Bearer ${token}`,
-    };
-    const updatedConfig: AxiosConfig = {
-        ...config,
-        headers,
-    };
+    const updatedConfig: AxiosConfig = generateUpdatedConfig(config, token);
 
     return baseAxiosInstance
         .get<T>(url, updatedConfig)
@@ -68,25 +41,20 @@ export function post<T, R>(
     enableDefaultErrorHandling = true,
     config: AxiosConfig = undefined
 ):  Promise<R> {
-    const token = getToken();
-
-    // Include the token in the request headers
-    const headers = {
-        ...config?.headers,
-        Authorization: `Bearer ${token}`,
-    };
-    const updatedConfig: AxiosConfig = {
-        ...config,
-        headers,
-    };
+    let token = getToken();
+    const updatedConfig: AxiosConfig = generateUpdatedConfig(config, token);
 
     return baseAxiosInstance
         .post<T>(url, data, updatedConfig)
         .then((response) => {
-            Promise.resolve(response.data.result);
-            const token = response.data.token;
-            // Save the token to localStorage
-            saveToken(token);
+            const responseToken = response.data?.response?.token;
+
+            if (responseToken) {
+                token = responseToken;
+                // Save the token to localStorage
+                saveToken(token);
+            }
+            return Promise.resolve(response.data?.result);
         })
         .catch((error) => handleError(error, enableDefaultErrorHandling));
 }
@@ -111,17 +79,6 @@ export function patch<T, R>(
 ):  Promise<R> {
     return baseAxiosInstance
         .patch(url, data, config)
-        .then((response) => Promise.resolve(response.data.result))
-        .catch((error) => handleError(error, enableDefaultErrorHandling));
-}
-
-export function remove<T>(
-    url: string,
-    enableDefaultErrorHandling = true,
-    config: AxiosConfig = undefined
-):  Promise<T> {
-    return baseAxiosInstance
-        .delete(url, config)
         .then((response) => Promise.resolve(response.data.result))
         .catch((error) => handleError(error, enableDefaultErrorHandling));
 }
