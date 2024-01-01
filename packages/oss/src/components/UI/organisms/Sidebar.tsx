@@ -1,7 +1,7 @@
 import React from 'react';
 import { Transition } from 'react-transition-group';
 import { Flex, Text, Button } from '@radix-ui/themes';
-import {useSidebarStore } from '@/store/sidebarStore';
+import {useSidebarStore } from '@/store';
 import Logo from "@/assets/images/featured-controller.png";
 
 import {SidebarMenuItem} from '../molecules/SidebarMenuItem'
@@ -47,7 +47,7 @@ export const  Sidebar = ({title, items}: SidebarProps) => {
                         ...transitionStyles[state],
                     }}
                 >
-                    <div className="h-full no-scrollbar flex flex-nowrap border-slate-500 px-3 py-6 md:border-r">
+                    <div className="h-full no-scrollbar flex flex-nowrap border-slate-500 px-3 py-6 md:border-r bg-black">
                         <div>
                             {/* Evo primera jednog za radix */}
                         <Flex
